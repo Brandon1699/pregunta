@@ -7,8 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to move the No button randomly
     const moveNoButton = () => {
-        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        const buttonWidth = noBtn.offsetWidth;
+        const buttonHeight = noBtn.offsetHeight;
+
+        // Calculate safe boundaries
+        const maxX = window.innerWidth - buttonWidth - 20; // 20px padding right
+        const maxY = window.innerHeight - buttonHeight - 20; // 20px padding bottom
+
+        // Ensure coordinates are at least 20px from top/left
+        const x = Math.max(20, Math.random() * maxX);
+        const y = Math.max(20, Math.random() * maxY);
 
         noBtn.style.position = 'fixed'; // Use fixed to position relative to viewport
         noBtn.style.left = `${x}px`;
@@ -20,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     noBtn.addEventListener('touchstart', (e) => {
         e.preventDefault(); // Prevent click on touch devices
         moveNoButton();
-    });
+    }, { passive: false });
 
     // Yes button action
     yesBtn.addEventListener('click', () => {
