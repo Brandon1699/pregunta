@@ -1,0 +1,117 @@
+body {
+    background-color: #ffe6e6;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 90%;
+    width: 400px;
+}
+
+h1 {
+    color: #ff4d4d;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    /* Important for absolute positioning of No button if needed */
+    height: 60px;
+    /* Reserve space */
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    /* transition: transform 0.2s, box-shadow 0.2s;  Removed for instant movement on No button, can keep for Yes if split */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+#yesBtn {
+    background-color: #ff4d4d;
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* Keep smooth effect for Yes button */
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(255, 77, 77, 0.4);
+}
+
+#noBtn {
+    background-color: #e0e0e0;
+    color: #555;
+    /* position: absolute; Removed to sit next to Yes button initially */
+    /* left: 60%; Removed */
+}
+
+.couple-photo {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    /* Limit height to fit screen */
+    object-fit: cover;
+}
+
+/* Hidden state for success message */
+.hidden {
+    display: none;
+}
+
+#message {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Heart background animation */
+.heart {
+    position: absolute;
+    top: -1vh;
+    font-size: 2rem;
+    color: #ff4d4d;
+    opacity: 0.6;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(105vh) rotate(360deg);
+    }
+}
