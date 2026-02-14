@@ -65,8 +65,9 @@ button {
 #noBtn {
     background-color: #e0e0e0;
     color: #555;
-    /* position: absolute; Removed to sit next to Yes button initially */
-    /* left: 60%; Removed */
+    touch-action: none;
+    transition: none;
+    /* Important for JS physics */
 }
 
 .couple-photo {
@@ -74,9 +75,31 @@ button {
     border-radius: 15px;
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    max-height: 200px;
-    /* Limit height to fit screen */
+    max-height: 50vh;
+    /* Responsive large size */
     object-fit: cover;
+}
+
+/* Pulsing animation for Yes button */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(255, 77, 77, 0.6);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
+    }
+}
+
+.pulsing {
+    animation: pulse 1s infinite;
 }
 
 /* Hidden state for success message */

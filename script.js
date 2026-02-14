@@ -5,33 +5,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttonsContainer = document.querySelector('.buttons');
 
     let isMoving = false;
+    let x = 0;
+    let y = 0;
+    let vx = 3; // Horizontal velocity
+    let vy = 3; // Vertical velocity
+    let animationId;
 
-    // Function to move the No button randomly
-    const moveNoButton = () => {
-        const buttonWidth = noBtn.offsetWidth;
-        const buttonHeight = noBtn.offsetHeight;
-
-        // Calculate safe boundaries
-        const maxX = window.innerWidth - buttonWidth - 20; // 20px padding right
-        const maxY = window.innerHeight - buttonHeight - 20; // 20px padding bottom
-
-        // Ensure coordinates are at least 20px from top/left
-        const x = Math.max(20, Math.random() * maxX);
-        const y = Math.max(20, Math.random() * maxY);
-
-        noBtn.style.position = 'fixed'; // Use fixed to position relative to viewport
+    // Initialize position
+    function initPosition() {
+        const rect = noBtn.getBoundingClientRect();
+        x = rect.left;
+        y = rect.top;
+        // Ensure accurate starting position for fixed
+        noBtn.style.position = 'fixed';
         noBtn.style.left = `${x}px`;
         noBtn.style.top = `${y}px`;
+    }
+
+    // DVD Bouncing Logic
+    const updatePosition = () => {
+        const buttonWidth = noBtn.offsetWidth;
+        const buttonHeight = noBtn.offsetHeight;
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        // Update position
+        x += vx;
+        y += vy;
+
+        // Check collisions with window boundaries
+        if (x + buttonWidth >= screenWidth || x <= 0) {
+            vx = -vx; // Reverse horizontal direction
+            x = Math.max(0, Math.min(x, screenWidth - buttonWidth)); // Clamp
+        }
+        if (y + buttonHeight >= screenHeight || y <= 0) {
+            vy = -vy; // Reverse vertical direction
+            y = Math.max(0, Math.min(y, screenHeight - buttonHeight)); // Clamp
+        }
+
+        // Apply new position
+        noBtn.style.left = `${x}px`;
+        noBtn.style.top = `${y}px`;
+
+        // Continue loop
+        if (isMoving) {
+            animationId = requestAnimationFrame(updatePosition);
+        }
     };
 
     const startMoving = (e) => {
         if (e.type === 'touchstart') e.preventDefault(); // Prevent default only on touch
 
         if (!isMoving) {
+            initPosition(); // Capture current position before moving
             isMoving = true;
-            yesBtn.classList.add('pulsing');
-            moveNoButton(); // Move immediately
-            setInterval(moveNoButton, 600); // Move every 600ms
+            yesBtn.classList.add('pulsing'); // Start pulsing Yes button
+
+            // Randomize initial direction slightly
+            vx = (Math.random() > 0.5 ? 3 : -3) * (Math.random() * 0.5 + 0.8);
+            vy = (Math.random() > 0.5 ? 3 : -3) * (Math.random() * 0.5 + 0.8);
+
+            updatePosition(); // Start loop
         }
     };
 
@@ -41,10 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Yes button action
     yesBtn.addEventListener('click', () => {
+        isMoving = false; // Stop the loop
+        cancelAnimationFrame(animationId);
+
         message.classList.remove('hidden');
         message.style.display = 'block';
         buttonsContainer.style.display = 'none'; // Hide buttons
-        yesBtn.classList.remove('pulsing');
+        yesBtn.classList.remove('pulsing'); // Stop pulsing
         createHearts();
     });
 
@@ -61,6 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 heart.remove();
             }, 5000);
-        }, 225);
+        }, 225); // Faster interval for 25% more hearts
     }
 });
