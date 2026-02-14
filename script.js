@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const yesBtn = document.getElementById('yesBtn');
     const message = document.getElementById('message');
     const buttonsContainer = document.querySelector('.buttons');
-    const mainContainer = document.querySelector('.container');
+
+    let isMoving = false;
 
     // Function to move the No button randomly
     const moveNoButton = () => {
@@ -23,18 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
         noBtn.style.top = `${y}px`;
     };
 
+    const startMoving = (e) => {
+        if (e.type === 'touchstart') e.preventDefault(); // Prevent default only on touch
+
+        if (!isMoving) {
+            isMoving = true;
+            yesBtn.classList.add('pulsing');
+            moveNoButton(); // Move immediately
+            setInterval(moveNoButton, 600); // Move every 600ms
+        }
+    };
+
     // Events for No button interaction (hover and touch)
-    noBtn.addEventListener('mouseover', moveNoButton);
-    noBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevent click on touch devices
-        moveNoButton();
-    }, { passive: false });
+    noBtn.addEventListener('mouseover', startMoving);
+    noBtn.addEventListener('touchstart', startMoving, { passive: false });
 
     // Yes button action
     yesBtn.addEventListener('click', () => {
         message.classList.remove('hidden');
         message.style.display = 'block';
         buttonsContainer.style.display = 'none'; // Hide buttons
+        yesBtn.classList.remove('pulsing');
         createHearts();
     });
 
@@ -51,6 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 heart.remove();
             }, 5000);
-        }, 300);
+        }, 225);
     }
 });
